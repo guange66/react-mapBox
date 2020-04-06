@@ -1,0 +1,11 @@
+
+.title {
+  background: rgb(214, 121, 242);
+}
+.map{
+  height: 300px;
+}
+.drawTop{
+  top:90px;
+  background-color: #000;
+}
