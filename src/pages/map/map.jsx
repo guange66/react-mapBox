@@ -1,6 +1,7 @@
 import React from 'react';
 import 'mapbox-gl';
-import ReactMapboxGl, { Layer, Feature, ZoomControl,ScaleControl ,RotationControl,MapContext,Source     } from 'react-mapbox-gl';
+import ReactMapboxGl, { Layer, Feature, ScaleControl ,MapContext,Source     } from 'react-mapbox-gl';
+import{ RulerControl,StylesControl,CompassControl,  ZoomControl, InspectControl, AroundControl,TooltipControl } from 'mapbox-gl-controls';
 import DrawControl from 'react-mapbox-gl-draw'; 
 // import Script from 'react-load-script';
 import styles from './map.less';
@@ -67,93 +68,22 @@ export default () => {
         state.eqMap=map
         state.eqMap.setCenter([-74.5447, 40.6892])
         state.eqMap.zoomTo(10)
+        map.addControl(new StylesControl(), 'top-right');
+        map.addControl(new RulerControl({
+          units: 'miles',
+          labelFormat: n => `${n.toFixed(2)*1000} 米`,
+        }), 'top-left');
+        map.addControl(new CompassControl(), 'top-left')
+        // map.addControl(new InspectControl(), 'top-left'); 
+        map.addControl(new ZoomControl(), 'top-left');
+        map.addControl(new AroundControl(), 'top-left');
+        map.addControl(new TooltipControl(), 'top-left');
         
-        // state.eqMap.on('load', function() {
-        //     // map.addSource('wms-test-source', {
-        //     // 'type': 'raster',
-        //     // 'tiles': [
-        //     // 'http://map.eqfleetcmder.com/eq-map/wms?'+
-        //     // 'bbox={bbox-epsg-3857}'+
-        //     // '&format=image/png'+
-        //     // '&service=WMS'+
-        //     // '&version=1.1.1'+
-        //     // '&request=GetMap'+
-        //     // '&srs=EPSG:3857'+
-        //     // '&transparent=true'+ 
-        //     // '&zIndex=99999'+
-        //     // '&layers=eq-map:eqmap'
-        //     // ],
-        //     // 'tileSize': 256
-        //     // });
-        //     state.eqMap.addLayer(
-        //     {
-        //     'id': 'wms-test-layer',
-        //     'type': 'raster',
-        //     'source': {
-        //     'type': 'raster',
-        //     'tiles': [
-        //     'http://map.eqfleetcmder.com/eq-map/wms?'+
-        //     'bbox={bbox-epsg-3857}'+
-        //     '&format=image/png'+
-        //     '&service=WMS'+
-        //     '&request=GetMap'+
-        //     '&srs=EPSG:3857'+
-        //     '&maxZoom=22'+
-        //     '&maxZoom=1'+
-        //     '&transparent=true'+ 
-        //     '&exceptions=application/vnd.ogc.se_inimage'+
-        //     '&zIndex=99999'+
-        //     '&layers="eq-map:eqmap"'
-        //     ],
-        //     'tileSize': 256
-        //     },
-        //     'paint': {}
-        //     },
-        //     'aeroway-line'
-        //     );
-        //     })
-        // map.on('load', function() {  
-        //   map.addLayer(
-        //   {
-        //     'id': 'wms_layer',// 图层ID
-        //     'type': 'raster',// 图层类型
-        //     'source': {
-        //     'type': 'raster',// 数据源类型，因为wms返回图片数据，因此为该类型
-        //    'tiles': [
-        //    'http://map.eqfleetcmder.com/eq-map/wms?'// wms地图服务地址
-        //     + 'version=1.3.0'// wms的版本，必须是这个值
-        //    + '&request=getmap'// 调用的方法名称，获取地图必须是这个方法
-        //      + '&BGCOLOR=ff00ff'// 生成的图片背景颜色
-        //      // layers 使用ArcGIS进行发布的时候默认图层名称为0，1，2的索引值，在发布地图服务的时候可以勾选
-        //     // “使用地图文档中的图层名称”，在访问的时候图层名称就是地图上图层名称，不然就是0，1，2，3的索引值
-        //      + '&layers=eq-map:eqmap'// 要显示的图层名称，多个图层用,隔开；
-        //      + '&styles='// 图层显示样式，同样多个样式名称间用，隔开；
-        //       + '&crs=EPSG:3857'
-        //     + '&bbox={bbox-epsg-3857}'// 使用map加载的wms的时候，使用这个标识来同步要获取地图的范围的坐标，必须为这个值
-        //      + '&width=256'// 返回的图片的大小
-        //      + '&height=256'// 返回的图片的大小
-        //      + '&format=image/png'// 返回的图片格式
-        //     + '&TRANSPARENT=TRUE'// 设置背景是不是可以透明，没有数据的地方就进行透明 
-        //      ],
-        //     'tileSize': 256 // 图片显示的大小，最好和上面大小保持一致
-        //      },
-        //     'paint': {
-        //      "raster-opacity": 1,// 图层显示透明度
-        //     // raster-hue-rotate 设置该值以后，显示的颜色就不会是图层样式里面设置的颜色，所以最好不要设置
-        //      // "raster-hue-rotate": 60,//在色轮上旋转色相的角度
-        //     } 
-        //   }
-        //   );
-        //   })
       }}
     </MapContext.Consumer>
         <ScaleControl/>
-        <ZoomControl
-        position="top-right"
-        />
-        <RotationControl/>
-         <DrawControl  
-         />
+          
+         <DrawControl position="top-right"/>
          
         <Source id="source_id" tileJsonSource={RASTER_SOURCE} />
         <Layer type="raster" id="layerId"   sourceId="source_id">
