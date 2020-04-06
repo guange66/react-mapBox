@@ -40,7 +40,7 @@ npm run build
 npm run lint
 ```
 
-You can also use script to auto fix some lint error:
+您还可以使用脚本自动修复某些错误:
 
 ```bash
 npm run lint:fix
