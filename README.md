@@ -1,8 +1,8 @@
-# Ant Design Pro
+# REACT全家桶（react+antd+dva+umi）+mapBox搭建后台管理系统
 
-This project is initialized with [Ant Design Pro](https://pro.ant.design). Follow is the quick guide for how to use.
 
-## Environment Prepare
+基于antd，更多详情请访问 [Ant Design Pro](https://pro.ant.design).
+## 环境准备
 
 Install `node_modules`:
 
@@ -16,25 +16,25 @@ or
 yarn
 ```
 
-## Provided Scripts
+## 提供的脚本
 
-Ant Design Pro provides some useful script to help you quick start and build with web project, code style check and test.
+Ant Design Pro提供了一些有用的脚本来帮助您快速启动和构建Web项目，代码样式检查和测试。
 
-Scripts provided in `package.json`. It's safe to modify or add additional script:
+可根据项目需求修改或添加 `package.json`
 
-### Start project
+### 运行项目
 
 ```bash
 npm start
 ```
 
-### Build project
+### 打包项目
 
 ```bash
 npm run build
 ```
 
-### Check code style
+### 检查代码样式
 
 ```bash
 npm run lint
@@ -46,12 +46,11 @@ You can also use script to auto fix some lint error:
 npm run lint:fix
 ```
 
-### Test code
+### 测试
 
 ```bash
 npm test
 ```
 
-## More
-
-You can view full document on our [official website](https://pro.ant.design). And welcome any feedback in our [github](https://github.com/ant-design/ant-design-pro).
+## 更多敬请期待
+ ...
