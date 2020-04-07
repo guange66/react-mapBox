@@ -3,16 +3,19 @@
  * You can view component api by:
  * https://github.com/ant-design/ant-design-pro-layout
  */
-import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
-import React, { useEffect } from 'react';
+import ProLayout, { DefaultFooter,PageHeaderWrapper } from '@ant-design/pro-layout';
+import React, {useState, useEffect } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import { Link, useIntl, connect } from 'umi';
 import { GithubOutlined } from '@ant-design/icons';
-import { Result, Button } from 'antd';
+import { Result, Button, Tabs  } from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
-import { getAuthorityFromRouter } from '@/utils/utils';
+import { getAuthorityFromRouter  } from '@/utils/utils';
 import logo from '../assets/logo.svg';
+ 
 
+const { TabPane } = Tabs;
 const noMatch = (
   <Result
     status={403}
@@ -61,8 +64,10 @@ const defaultFooterDom = (
   />
 );
 
+
+
 const BasicLayout = (props) => {
-  const {
+   const {
     dispatch,
     children,
     settings,
@@ -70,17 +75,42 @@ const BasicLayout = (props) => {
       pathname: '/',
     },
   } = props;
+  const panes = [
+    {
+      key: 'tab1',
+      tab: '欢迎',
+    },
+    {
+      key: 'tab2',
+      tab: 'MapBox',
+    },
+    {
+      key: 'tab3',
+      tab: 'List',
+    }
+  ];
+ const [activeKey, setActiveKey] = useState('welcome');
+  console.log(props)
+ 
   /**
    * constructor
    */
 
   useEffect(() => {
+    
+    props.history.push(activeKey);
     if (dispatch) {
       dispatch({
         type: 'user/fetchCurrent',
       });
     }
   }, []);
+
+  const onChange = (activeKey) => {
+    console.log(activeKey)
+    setActiveKey(activeKey)
+    props.history.push(activeKey);
+  };
   /**
    * init variables
    */
@@ -94,9 +124,9 @@ const BasicLayout = (props) => {
     }
   }; // get children authority
 
-  const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
-    authority: undefined,
-  };
+  // const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
+  //   authority: undefined,
+  // };
   const {} = useIntl();
   return (
     <ProLayout
@@ -136,9 +166,22 @@ const BasicLayout = (props) => {
       {...props}
       {...settings}
     >
-      <Authorized authority={authorized.authority} noMatch={noMatch}>
+      {/* <PageHeaderWrapper tabList={panes} onTabChange={onOperationTabChange}> 
         {children}
-      </Authorized>
+      </PageHeaderWrapper> */}
+      {/* <Authorized authority={authorized.authority} noMatch={noMatch}>
+        {children}
+      </Authorized> */}
+      <Tabs activeKey={activeKey} type="editable-card"  onChange={onChange}
+            >
+              {props.route.routes.map((route) => (
+                <TabPane tab={route.name} key={route.key}>
+                   <Switch>
+                   <Route key={route.path} path={route.path} closable="false" component={route.component} exact={route.exact} />
+                  </Switch> 
+                </TabPane>
+              ))}
+            </Tabs>
     </ProLayout>
   );
 };

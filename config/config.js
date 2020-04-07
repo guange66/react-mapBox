@@ -56,10 +56,12 @@ export default defineConfig({
           routes: [
             {
               path: '/',
+              key:'home',
               redirect: '/welcome',
             },
             {
               path: '/welcome',
+              key:'welcome',
               name: '欢迎',
               icon: 'smile',
               component: './Welcome',
@@ -67,12 +69,14 @@ export default defineConfig({
             {
               path: '/map',
               name: 'mapBox',
+              key:'map',
               icon: 'smile',
               component: './map/map.jsx',
             },
             {
               path: '/admin',
               name: 'admin',
+              key:'admin',
               icon: 'crown',
               component: './Admin',
               authority: ['admin'],
@@ -80,6 +84,7 @@ export default defineConfig({
                 {
                   path: '/admin/sub-page',
                   name: 'sub-page',
+                  key:'sub-page',
                   icon: 'smile',
                   component: './Welcome',
                   authority: ['admin'],
@@ -88,16 +93,19 @@ export default defineConfig({
             },
             {
               name: 'list.table-list',
+              key:'list',
               icon: 'table',
               path: '/list',
               component: './ListTableList',
             },
             {
+              key:'404',
               component: './404',
             },
           ],
         },
         {
+          key:'404',
           component: './404',
         },
       ],

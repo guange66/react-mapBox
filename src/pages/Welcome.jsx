@@ -1,6 +1,6 @@
 import React from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Card, Typography, Alert } from 'antd';
+import { Card, Typography, Alert, input } from 'antd';
 import styles from './Welcome.less';
 
 const CodePreview = ({ children }) => (
@@ -14,6 +14,7 @@ const CodePreview = ({ children }) => (
 export default () => (
   <PageHeaderWrapper>
     <Card>
+      <input/>
       <Alert
         message="umi ui 现已发布，点击右下角 umi 图标即可使用"
         type="success"
