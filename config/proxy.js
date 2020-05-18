@@ -14,6 +14,14 @@ export default {
         '^': '',
       },
     },
+    //http://map.eqfleetcmder.com/eq-map/wms
+    '/wmsserve': {
+      target: 'http://map.eqfleetcmder.com/eq-map/wms',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/wmsserve': '',
+      },
+    },
   },
   test: {
     '/api/': {

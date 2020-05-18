@@ -33,19 +33,19 @@ const WMS_SOURCE={
             'id': 'wms-test-layer',
             'type': 'raster',  
             'tiles': [
-            'http://map.eqfleetcmder.com/eq-map/wms?'+
+            '/wmsserve?'+
             'bbox={bbox-epsg-3857}'+
-            '&version=1.3.0'+
+            '&version=1.1.1'+
             '&format=image/png'+
             '&service=WMS'+
             '&request=GetMap'+
             '&srs=EPSG:3857'+
-            '&maxZoom=22'+
-            '&maxZoom=1'+
+            '&width=256'+
+            '&height=256'+
             '&transparent=true'+ 
             '&exceptions=application/vnd.ogc.se_inimage'+
             '&zIndex=99999'+
-            '&layers="eq-map:eqmap"'
+            '&layers=eq-map:eqmap'
             ],
             'tileSize': 256
             } 
@@ -66,12 +66,12 @@ export default () => {
       {(map) => {
         // use `map` here
         state.eqMap=map
-        state.eqMap.setCenter([-74.5447, 40.6892])
-        state.eqMap.zoomTo(10)
+        state.eqMap.setCenter([110.257771304,39.883722493])
+        state.eqMap.zoomTo(15)
         map.addControl(new StylesControl(), 'top-right');
         map.addControl(new RulerControl({
           units: 'miles',
-          labelFormat: n => `${n.toFixed(2)*1000} 米`,
+          labelFormat: n => `${n.toFixed(3)*1000} 米`,
         }), 'top-left');
         map.addControl(new CompassControl(), 'top-left')
         // map.addControl(new InspectControl(), 'top-left'); 
@@ -85,7 +85,7 @@ export default () => {
           
          <DrawControl position="top-right"/>
          
-        <Source id="source_id" tileJsonSource={RASTER_SOURCE} />
+        <Source id="source_id" tileJsonSource={WMS_SOURCE} />
         <Layer type="raster" id="layerId"   sourceId="source_id">
           <Feature coordinates={[39.883722493,110.257771304]} />
         </Layer>

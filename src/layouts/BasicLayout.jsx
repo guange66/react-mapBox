@@ -3,19 +3,17 @@
  * You can view component api by:
  * https://github.com/ant-design/ant-design-pro-layout
  */
-import ProLayout, { DefaultFooter,PageHeaderWrapper } from '@ant-design/pro-layout';
-import React, {useState, useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import ProLayout, { DefaultFooter, SettingDrawer } from '@ant-design/pro-layout';
+import React, { useEffect } from 'react';
 import { Link, useIntl, connect } from 'umi';
 import { GithubOutlined } from '@ant-design/icons';
-import { Result, Button, Tabs  } from 'antd';
+import { Result, Button } from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
-import { getAuthorityFromRouter  } from '@/utils/utils';
+import { getAuthorityFromRouter } from '@/utils/utils';
+import TabPages from '@/components/TabPages';
 import logo from '../assets/logo.svg';
- 
 
-const { TabPane } = Tabs;
 const noMatch = (
   <Result
     status={403}
@@ -28,16 +26,16 @@ const noMatch = (
     }
   />
 );
+
 /**
  * use Authorized check all menu item
  */
-
-const menuDataRender = (menuList) =>
-  menuList.map((item) => {
+const menuDataRender = menuList => {
+  return menuList.map(item => {
     const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
     return Authorized.check(item.authority, localItem, null);
   });
-
+}
 const defaultFooterDom = (
   <DefaultFooter
     copyright="2019 蚂蚁金服体验技术部出品"
@@ -64,10 +62,8 @@ const defaultFooterDom = (
   />
 );
 
-
-
-const BasicLayout = (props) => {
-   const {
+const BasicLayout = props => {
+  const {
     dispatch,
     children,
     settings,
@@ -75,47 +71,22 @@ const BasicLayout = (props) => {
       pathname: '/',
     },
   } = props;
-  const panes = [
-    {
-      key: 'tab1',
-      tab: '欢迎',
-    },
-    {
-      key: 'tab2',
-      tab: 'MapBox',
-    },
-    {
-      key: 'tab3',
-      tab: 'List',
-    }
-  ];
- const [activeKey, setActiveKey] = useState('welcome');
-  console.log(props)
- 
   /**
    * constructor
    */
 
   useEffect(() => {
-    
-    props.history.push(activeKey);
     if (dispatch) {
       dispatch({
         type: 'user/fetchCurrent',
       });
     }
   }, []);
-
-  const onChange = (activeKey) => {
-    console.log(activeKey)
-    setActiveKey(activeKey)
-    props.history.push(activeKey);
-  };
   /**
    * init variables
    */
 
-  const handleMenuCollapse = (payload) => {
+  const handleMenuCollapse = payload => {
     if (dispatch) {
       dispatch({
         type: 'global/changeLayoutCollapsed',
@@ -124,65 +95,66 @@ const BasicLayout = (props) => {
     }
   }; // get children authority
 
-  // const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
-  //   authority: undefined,
-  // };
-  const {} = useIntl();
+  const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
+    authority: undefined,
+  };
+  const { formatMessage } = useIntl();
   return (
-    <ProLayout
-      logo={logo}
-      menuHeaderRender={(logoDom, titleDom) => (
-        <Link to="/">
-          {logoDom}
-          {titleDom}
-        </Link>
-      )}
-      onCollapse={handleMenuCollapse}
-      menuItemRender={(menuItemProps, defaultDom) => {
-        if (menuItemProps.isUrl || menuItemProps.children || !menuItemProps.path) {
-          return defaultDom;
-        }
+    <>
+      <ProLayout
+        logo={logo}
+        formatMessage={formatMessage}
+        menuHeaderRender={(logoDom, titleDom) => (
+          <Link to="/">
+            {logoDom}
+            {titleDom}
+          </Link>
+        )}
+        onCollapse={handleMenuCollapse}
+        menuItemRender={(menuItemProps, defaultDom) => {
+          if (menuItemProps.isUrl || menuItemProps.children || !menuItemProps.path) {
+            return defaultDom;
+          }
 
-        return <Link to={menuItemProps.path}>{defaultDom}</Link>;
-      }}
-      breadcrumbRender={(routers = []) => [
-        {
-          path: '/',
-          breadcrumbName: '首页',
-        },
-        ...routers,
-      ]}
-      itemRender={(route, params, routes, paths) => {
-        const first = routes.indexOf(route) === 0;
-        return first ? (
-          <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
-        ) : (
-          <span>{route.breadcrumbName}</span>
-        );
-      }}
-      footerRender={() => defaultFooterDom}
-      menuDataRender={menuDataRender}
-      rightContentRender={() => <RightContent />}
-      {...props}
-      {...settings}
-    >
-      {/* <PageHeaderWrapper tabList={panes} onTabChange={onOperationTabChange}> 
-        {children}
-      </PageHeaderWrapper> */}
-      {/* <Authorized authority={authorized.authority} noMatch={noMatch}>
-        {children}
-      </Authorized> */}
-      <Tabs activeKey={activeKey} type="editable-card"  onChange={onChange}
-            >
-              {props.route.routes.map((route) => (
-                <TabPane tab={route.name} key={route.key}>
-                   <Switch>
-                   <Route key={route.path} path={route.path} closable="false" component={route.component} exact={route.exact} />
-                  </Switch> 
-                </TabPane>
-              ))}
-            </Tabs>
-    </ProLayout>
+          return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+        }}
+        breadcrumbRender={(routers = []) => [
+          {
+            path: '/',
+            breadcrumbName: formatMessage({
+              id: 'menu.home',
+            }),
+          },
+          ...routers,
+        ]}
+        itemRender={(route, params, routes, paths) => {
+          const first = routes.indexOf(route) === 0;
+          return first ? (
+            <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
+          ) : (
+              <span>{route.breadcrumbName}</span>
+            );
+        }}
+        footerRender={() => defaultFooterDom}
+        menuDataRender={menuDataRender}
+        rightContentRender={() => <RightContent />}
+        {...props}
+        {...settings}
+      >
+        <Authorized authority={authorized.authority} noMatch={noMatch}>
+          <TabPages {...props} errorPage="/404" remberRefresh animated maxTab="20" homePage="/welcome" />
+        </Authorized>
+      </ProLayout>
+      <SettingDrawer
+        settings={settings}
+        onSettingChange={config =>
+          dispatch({
+            type: 'settings/changeSetting',
+            payload: config,
+          })
+        }
+      />
+    </>
   );
 };
 

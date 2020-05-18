@@ -100,6 +100,7 @@ export default defineConfig({
             },
             {
               key:'404',
+              path: '/404',
               component: './404',
             },
           ],
